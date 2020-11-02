@@ -1,59 +1,48 @@
-
 export const language = {
-    URNFIELD: 'urnfield',
-    ROMAN: 'roman',
-    ARABIC: 'arabic'
+  URNFIELD: 'urnfield',
+  ROMAN: 'roman',
+  ARABIC: 'arabic'
 }
 
-export const convert = (range = {start: 1, end: 10}, language = 'arabic') => {
-    switch(language) {
-        case 'urnfield':
-            return convertToUrnfield(range);
-        default:
-            return convertToArabic(range);
-           
-    }
+export const convert = (range = { start: 1, end: 10 }, language = 'arabic') => {
+  if (range === null || language === null) {
+    return 'invalid input'
+  }
+  switch (language) {
+    case 'urnfield':
+      return convertToUrnfield(range)
+    default:
+      return convertToArabic(range)
+  }
 }
 
-const convertToUrnfield = range => {
-    let current = [];
-    for (let i = range.start; i <= range.end; i++) {
-         current.push(aracbicCharacterToUrnfield(i));
-    }
-    return current.join(', ');
+const convertToUrnfield = (range) => {
+  const current = []
+  for (let i = range.start; i <= range.end; i++) {
+    current.push(aracbicCharacterToUrnfield(i))
+  }
+  return current.join(', ')
 }
 
 const aracbicCharacterToUrnfield = (character) => {
-    let fives = [];
-    let other;
-    while (character >= 5) {
-        fives.push('\\');
-        character = character - 5;
-    }
-    switch (character) {
-        case 4:
-            other =  '////';
-            break;
-        case 3:
-            other =  '///';
-            break;
-        case 2:
-            other = '//';
-            break
-        case 1:
-            other = '/';
-            break;
-        default:
-            other = '';
-    }
-    const result = other + '' + fives.join('');
-    return result;
+  const fives = []
+  let other = ''
+  while (character >= 5) {
+    fives.push('\\')
+    character = character - 5
+  }
+  if (character !== 0) {
+    other = '/'.repeat(character)
+  }
+
+  const result = other + '' + fives.join('')
+  return result
 }
 
-const convertToArabic = range => {
-    let result = [];
-    for (let i = range.start; i <= range.end; i++) {
-        result.push(i);
-    }
-    return result.join(', ');
+const convertToArabic = (range) => {
+  const result = []
+  for (let i = range.start; i <= range.end; i++) {
+    result.push(i)
+  }
+  return result.join(', ')
 }
